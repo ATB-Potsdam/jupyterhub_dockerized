@@ -45,6 +45,7 @@ RUN conda install --quiet --yes \
     'r-tidyverse=1.3*' \
     'unixodbc=2.3.*' \
     'r-tidymodels=0.1*' \
+    'r-plotly=4.*' \
     && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}"
@@ -77,11 +78,19 @@ RUN gem install iruby --pre
 RUN iruby register --force
 RUN cp -r /home/jovyan/.local/share/jupyter/kernels/ruby /usr/local/share/jupyter/kernels
 
+# Fortran kernel
+RUN conda install -c conda-forge fortran_kernel
 
 # install extensions and rebuild jupyter lab
+# arcgis leads to conflicts
+#    && conda install -y -c esri arcgis \
 RUN pip install jupyterlab-git \
     && conda install -c conda-forge jupyterlab-git \
     && pip install jupyterlab_github \
+    && pip install jupyter_contrib_nbextensions \
+    && conda install -y -c conda-forge jupyter_contrib_nbextensions \
+    && pip install ipython numpy matplotlib scipy sympy nose numba pandas \
+    && conda install -y -c ipython numpy matplotlib scipy sympy nose numba pandas \
     && jupyter lab build
 
 
