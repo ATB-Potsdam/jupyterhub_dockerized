@@ -4,6 +4,12 @@
 
 set -e
 
+# commands added to start cron
+sudo /usr/sbin/cron
+sudo chgrp crontab /var/spool/cron/crontabs
+sudo chmod 730 /var/spool/cron/crontabs
+
+
 # set default ip to 0.0.0.0
 if [[ "$NOTEBOOK_ARGS $@" != *"--ip="* ]]; then
     NOTEBOOK_ARGS="--ip=0.0.0.0 $NOTEBOOK_ARGS"
@@ -36,4 +42,4 @@ if [ ! -z "$JPY_HUB_API_URL" ]; then
 fi
 NOTEBOOK_BIN="jupyterhub-singleuser"
 
-. /usr/local/bin/start.sh $NOTEBOOK_BIN $NOTEBOOK_ARGS "$@"
+. /usr/local/bin/start.sh $NOTEBOOK_BIN $NOTEBOOK_ARGS --allow-root "$@"

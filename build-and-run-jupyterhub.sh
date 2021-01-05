@@ -12,8 +12,10 @@ docker kill jupyter
 docker kill jupyterhub
 echo y | docker system prune
 
-mkdir -p /var/lib/jupyterhub/srv
+sudo mkdir -p /var/lib/jupyterhub/srv
+sudo mkdir -p /var/lib/jupyterhub/crontabs
 mkdir -p /var/lib/jupyterhub/users
+mkdir -p /var/lib/jupyterhub/shared
 sudo cp -n jupyterhub_config.py /var/lib/jupyterhub/srv
 sudo cp user-bootstrap.sh /var/lib/jupyterhub/srv
 
@@ -27,5 +29,6 @@ docker run -dt --restart=always \
     -v /var/lib/jupyterhub/srv:/srv/jupyterhub \
     -v /var/lib/jupyterhub/users:/srv/users \
     -v /var/lib/jupyterhub/shared:/srv/shared \
+    -v /var/lib/jupyterhub/crontabs:/var/spool/cron/crontabs \
     jupyterhub_atb:latest \
     jupyterhub --debug

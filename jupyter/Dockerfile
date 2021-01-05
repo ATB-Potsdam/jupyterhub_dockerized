@@ -7,7 +7,7 @@ FROM $BASE_IMAGE
 
 USER root
 
-# R pre-requisites
+# system and R pre-requisites
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     fonts-dejavu \
@@ -17,6 +17,11 @@ RUN apt-get update && \
     gfortran \
     gcc \
     git \
+    ssh \
+    nano \
+    cron \
+    mc \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 # Fix for devtools https://github.com/conda-forge/r-devtools-feedstock/issues/4
@@ -81,18 +86,30 @@ RUN cp -r /home/jovyan/.local/share/jupyter/kernels/ruby /usr/local/share/jupyte
 # Fortran kernel
 RUN conda install -c conda-forge fortran_kernel
 
+
 # install extensions and rebuild jupyter lab
 # arcgis leads to conflicts
 #    && conda install -y -c esri arcgis \
-RUN pip install jupyterlab-git \
-    && conda install -c conda-forge jupyterlab-git \
-    && pip install jupyterlab_github \
-    && pip install jupyter_contrib_nbextensions \
-    && conda install -y -c conda-forge jupyter_contrib_nbextensions \
-    && pip install ipython numpy matplotlib scipy sympy nose numba pandas \
-    && conda install -y -c ipython numpy matplotlib scipy sympy nose numba pandas \
-    && jupyter lab build
+RUN conda update -n base conda \
+    && pip install pip --upgrade \
+    && pip install jupyterlab_scheduler papermill datawrapper gspread oauth2client gspread_dataframe selenium s3fs boto3 wget \
+    && conda install -y -c conda-forge \
+       jupyterlab-git jupyter_contrib_nbextensions \
+       ipython numpy matplotlib scipy sympy nose numba pandas ipysheet ipywidgets \
+    && jupyter lab build \
+    && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
+    && jupyter labextension install @jupyterlab/github \
+    && jupyter labextension install ipysheet
 
+RUN chown -R jovyan /opt/conda/share/jupyter/lab \
+    && echo jovyan  ALL = NOPASSWD: ALL > /etc/sudoers.d/jovyan \
+    && echo Defaults        secure_path="/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" >> /etc/sudoers.d/jovyan \
+    && echo PATH="/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" > /etc/environment \
+    && ln -s /opt/conda/bin/python /usr/bin/python \
+    && ln -s /opt/conda/bin/papermill /usr/bin/papermill
+
+
+ENV USER=jovyan
 
 USER $NB_UID
 

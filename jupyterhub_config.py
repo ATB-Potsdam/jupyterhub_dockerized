@@ -1036,8 +1036,8 @@ c.Spawner.pre_spawn_hook = user_bootstrap
 c.JupyterHub.hub_ip = 'jupyterhub'
 c.JupyterHub.hub_port = 8081
 
-# mount persistent home to home in the container
-c.DockerSpawner.volumes = { '/var/lib/jupyterhub/users/{username}':'/home/jovyan', '/var/lib/jupyterhub/shared':'/home/jovyan/shared' }
+# mount persistent home to home and other persistent directories in the container
+c.DockerSpawner.volumes = { '/var/lib/jupyterhub/users/{username}':'/home/jovyan', '/var/lib/jupyterhub/shared':'/home/jovyan/shared', '/var/lib/jupyterhub/crontabs':'/var/spool/cron/crontabs' }
 c.Spawner.notebook_dir = '/home/jovyan'
 c.Spawner.default_url = '/lab'
 
