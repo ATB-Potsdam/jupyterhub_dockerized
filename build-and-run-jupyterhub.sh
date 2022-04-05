@@ -1,8 +1,11 @@
 #!/bin/sh
 
 
-docker build ./jupyter -t jupyter_atb:latest
-docker build ./jupyterhub -t jupyterhub_atb:latest
+docker pull jupyterhub/singleuser:latest
+docker build --no-cache ./jupyter -t jupyter_atb:latest
+
+docker pull jupyterhub/jupyterhub:latest
+docker build --no-cache ./jupyterhub -t jupyterhub_atb:latest
 
 for container in `docker ps | grep "jupyter-" | cut -d" " -f1`; do
     docker kill $container
