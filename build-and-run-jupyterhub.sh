@@ -2,10 +2,10 @@
 
 
 docker pull jupyterhub/singleuser:latest
-docker build ./jupyter -t jupyter_atb:latest
+docker build ./jupyter -t jupyter_atb:latest || exit 1
 
 docker pull jupyterhub/jupyterhub:latest
-docker build ./jupyterhub -t jupyterhub_atb:latest
+docker build ./jupyterhub -t jupyterhub_atb:latest || exit 1
 
 for container in `docker ps | grep "jupyter-" | cut -d" " -f1`; do
     docker kill $container

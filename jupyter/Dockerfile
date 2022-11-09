@@ -77,10 +77,10 @@ RUN conda update --all \
 RUN sudo apt-get update \
     && sudo apt-get install -y --no-install-recommends \
     golang
-RUN env GO111MODULE=on go get github.com/gopherdata/gophernotes \
+RUN env GO111MODULE=on go install github.com/gopherdata/gophernotes@v0.7.5 \
     && mkdir -p ~/.local/share/jupyter/kernels/gophernotes \
     && cd ~/.local/share/jupyter/kernels/gophernotes \
-    && cp "$(go env GOPATH)"/pkg/mod/github.com/gopherdata/gophernotes@v0.7.4/kernel/*  "." \
+    && cp "$(go env GOPATH)"/pkg/mod/github.com/gopherdata/gophernotes@v0.7.5/kernel/*  "." \
     && chmod +w ./kernel.json \
     && sed "s|gophernotes|$(go env GOPATH)/bin/gophernotes|" < kernel.json.in > kernel.json \
     && sudo mv /home/jovyan/.local/share/jupyter/kernels/gophernotes /usr/local/share/jupyter/kernels
