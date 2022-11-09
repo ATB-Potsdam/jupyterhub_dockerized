@@ -92,6 +92,7 @@ RUN sudo apt-get update \
     && sudo apt-get install -y --no-install-recommends \
     libzmq3-dev \
     libczmq-dev \
+    libzmq5 \
     cpanminus
 ENV PERL5LIB=/home/jovyan/perl5/lib/perl5
 RUN cpanm --notest Devel::IPerl namespace::autoclean Moo MooX::HandlesVia Import::Into Data::OptList Sub::Name MRO::Compat Sub::Exporter Params::Validate HTML::Entities \
