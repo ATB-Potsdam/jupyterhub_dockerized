@@ -1,4 +1,4 @@
-FROM jupyterhub/jupyterhub:latest
+FROM jupyterhub/jupyterhub:3.0.0
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
@@ -11,6 +11,8 @@ RUN apt-get install -y wget bzip2 ca-certificates \
 # set timezone in container
 RUN echo "Europe/Berlin" > /etc/timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
+COPY admin-react.js /usr/local/share/jupyterhub/static/js/
 
 RUN pip install pip --upgrade
 RUN pip install dockerspawner
