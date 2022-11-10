@@ -13,6 +13,7 @@ done
 
 docker kill jupyter
 docker kill jupyterhub
+docker kill jupyterhub-nginx
 echo y | docker system prune
 
 sudo mkdir -p /var/lib/jupyterhub/srv
@@ -21,6 +22,7 @@ mkdir -p /var/lib/jupyterhub/users
 mkdir -p /var/lib/jupyterhub/shared
 sudo cp -n jupyterhub_config.py /var/lib/jupyterhub/srv
 sudo cp user-bootstrap.sh /var/lib/jupyterhub/srv
+sudo cp nginx-jupyterhub.conf /var/lib/jupyterhub/srv
 
 
 docker run -dt --restart=always \
@@ -35,3 +37,11 @@ docker run -dt --restart=always \
     -v /var/lib/jupyterhub/crontabs:/var/spool/cron/crontabs \
     jupyterhub_atb:latest \
     jupyterhub --debug
+
+docker run -dt --restart=always \
+    --name jupyterhub-nginx \
+    -p 80:80 \
+    -p 443:443 \
+    -v /var/lib/jupyterhub/srv/nginx-jupyterhub.conf:/etc/nginx/conf.d/nginx-jupyterhub.conf \
+    -v /etc/letsencrypt:/etc/letsencrypt \
+    nginx:latest
