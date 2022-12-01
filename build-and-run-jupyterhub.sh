@@ -8,7 +8,8 @@ docker pull jupyterhub/jupyterhub:latest
 docker build ./jupyterhub -t jupyterhub_atb:latest || exit 1
 
 for container in `docker ps | grep "jupyter-" | cut -d" " -f1`; do
-    docker kill $container
+    # leave user instances alone
+    echo docker kill $container
 done
 
 docker kill jupyter

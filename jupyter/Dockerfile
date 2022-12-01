@@ -153,6 +153,13 @@ RUN conda update --all
 RUN pip install pip --upgrade
 RUN conda install -y -c conda-forge jupyterlab-git jupyter_contrib_nbextensions ipython numpy matplotlib scipy sympy nose numba pandas ipysheet ipywidgets jupyterlab-geojson papermill gspread oauth2client selenium s3fs boto3 wget
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager @jupyterlab/geojson-extension
+RUN sudo jupyter nbextension install --py widgetsnbextension
+RUN jupyter nbextension enable --py widgetsnbextension
+RUN pip install nbtools
+RUN sudo jupyter nbextension install --py nbtools
+RUN jupyter nbextension enable --py nbtools
+
+
 # not yet compatible
 # RUN jupyter labextension install @jupyterlab/metadata-extension @jupyterlab/dataregistry-extension @jupyterlab/commenting-extension
 # does not work, enable in GUI
@@ -173,7 +180,7 @@ COPY start.sh start-from-jupyterhub.sh /usr/local/bin/
 CMD ["start-from-jupyterhub.sh"]
 
 
-WORKDIR /home
+WORKDIR /home/jovyan
 
 # Expose port to host
 EXPOSE 8888

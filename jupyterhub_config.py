@@ -132,7 +132,7 @@ c.JupyterHub.allow_named_servers = True
 #  shutdown the Hub, leaving everything else running.
 #  
 #  The Hub should be able to resume from database state.
-#c.JupyterHub.cleanup_servers = True
+c.JupyterHub.cleanup_servers = False
 
 ## Maximum number of concurrent users that can be spawning at a time.
 #  
@@ -1015,6 +1015,8 @@ c.JupyterHub.debug_proxy = True
 ## The number of threads to allocate for encryption
 #c.CryptKeeper.n_threads = 16
 
+c.ContentsManager.allow_hidden = True
+
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.DockerSpawner.image = 'jupyter_atb:latest'
 # hub api must be accessible in spawned containers
@@ -1048,3 +1050,7 @@ c.Authenticator.admin_users = { 'username1', 'username2' }
 c.GitHubOAuthenticator.client_id = 'CREATE_AT_GITHUB'
 c.GitHubOAuthenticator.client_secret = 'CREATE_AT_GITHUB'
 c.GitHubOAuthenticator.oauth_callback_url = 'https://YOUR_JUPYTERHUB_HOST/hub/oauth_callback'
+# restrict access to _public_ members of Github Organisations
+# c.GitHubOAuthenticator.allowed_organizations = [ 'Organisation1', 'Organisation2' ]
+# OR restrict access to list of Github users
+# c.GitHubOAuthenticator.allowed_users = [ 'username1', 'username2' ]
